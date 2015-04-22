@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    reins (0.0.1)
-      rails (~> 4.2.1)
+    reins (0.0.2)
+      rails (~> 4.1)
 
 GEM
   remote: https://rubygems.org/
@@ -120,6 +120,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  execjs
+  execjs (~> 2.5)
   reins!
-  rspec-rails
+  rspec-rails (~> 3.0)

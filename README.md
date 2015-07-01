@@ -27,20 +27,20 @@ You just have to define a special hash on the controller and this hash will be J
 
 Add reins to your Gemfile:
 
-```
+```ruby
 gem 'reins'
 ```
 
 Add reins.js to application.js:
 
-```
+```javascript
 //= require reins
 ```
 
 Add the reins script tag to your application layout, or any layout/view where you want reins to automatically call your javascript controllers.
 I prefer just adding it to ```layouts/application.html.erb``` (and any other layouts I might have) right before closing the ```<body>``` tag:
 
-```
+```html
 ...
 <body>
   ...
@@ -59,7 +59,7 @@ If the above steps went ok, now is the perfect time for an example:
 
 Suppose we generate a HelloController and add the following code inside:
 
-```
+```ruby
 class HelloController < ApplicationController
 
   def index
@@ -73,15 +73,15 @@ end
 
 Let's quickly create a controller and view by running:
 ```
-rails g controller hello
-touch app/views/hello/index.html.erb
+$ rails g controller hello
+$ touch app/views/hello/index.html.erb
 ```
 Don't worry about the empty view for now, as it is irrelevant for reins to work :)
 When you run the rails generator, reins will create a javascript file at
 /app/assets/javascripts/controllers/cookies.js with some boilerplate code. After
 changing a few lines it might look like this:
 
-```
+```javascript
 /**
  * Anonymous self-running closure to avoid polluting the global namespace with
  * definitions that should be kept private.
@@ -169,7 +169,7 @@ This will call the matching controller and pass the @reins_params hash if it was
 #### Why do my controllers only get called on page:load when using turbolinks? I want page:change!
 
 Just add this to your application.js:
-```
+```javascript
 $(document).off('page:load').on('page:change', r.call_js_controller);
 ```
 THIS WILL REMOVE any page:load event handlers that you may have attached to $(document), so be warned!

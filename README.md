@@ -8,20 +8,20 @@
 [![Gem Version](https://badge.fury.io/rb/reins.svg)](http://badge.fury.io/rb/reins)
 ![](http://ruby-gem-downloads-badge.herokuapp.com/reins)
 
+### TL;DR
+Reins provides an easy way to have separate jQuery ```$(document).ready``` and turbolinks ```page:load``` handlers for each of your controllers and actions. This will avoid weird initialization issues with conflicting selectors, and will help you know where JS initialization code for each page lives.
+
 ### Why reins?
-Rails' convention over configuration approach to development is well known, however when it comes to javascript it is sorely missing.
-Every time you create a scaffold, resource, or controller you get a new javascript file with that controller's name, but that's it.
-Since all the code is minified and aggregated into application.js by the assets pipeline, it's very easy to end up with a big mess.
+Rails' convention over configuration approach to development is well known, however when it comes to javascript it is sorely lacking - every time you create a scaffold, resource, or controller, you get a new javascript file named after that controller, but that's it.
+Then all your JS code is minified and aggregated into application.js by the assets pipeline with multiple ```$.ready``` callbacks that run on every page.
 
-This means that you need to manually find a way to keep the global scope clean, avoid name collisions and define a common structure for your javascript code.
+This means that you need to manually find a way to keep the global scope clean, avoid name collisions and define a common structure for your javascript code. If you're not very careful with your code's structure it's very easy to end up with a big unmaintainable mess as your application grows.
 
 
-Reins is a ruby gem that automates the creation of javascript controllers that match the structure of your rails controllers.
-It creates a predefined structure for your javascript code where code for different controllers is kept in separate namespaces.
-It also enables you to keep javascript code out of your views by defining functions that get called automatically on jQuery.ready and Turbolinks page:load for each rails controller action that runs.
+Reins is a ruby gem that automates the creation of jQuery ```$.ready``` and turbolinks ```page:load``` callbacks matching the structure of your rails controllers. It also creates a predefined structure for your javascript that helps you keep code for different controllers in separate namespaces.
 
-This even works in the case of javascript code that needs data from the server (which almost always ends up inside a script tag somewhere with erb thrown in the mix to include server-side data...).
-You just have to define a special hash on the controller and this hash will be JSONified and passed to the reins javascript controller as a dictionary object.
+Reins even works with javascript code that needs data from the server (which almost always ends up inside a script tag somewhere with erb thrown in the mix to include server-side data...).
+You just have to define a special hash on the controller and this hash will be JSONified and passed to the reins javascript controller as a dictionary object. We'll take a look at this further down.
 
 ### How can I start using it?
 
@@ -158,9 +158,8 @@ Most of the functionality is explained in the comments inside the javascript sni
 
 #### What if I'm rendering a js.erb view?
 
-Reins will not be called automatically for these, as the whole idea of js.erb views is to give you full control.
-However, to avoid repeating code, you can call your reins controller from js.erb views.
-You just need to do this:
+Reins will not be called automatically for these, as the whole idea of js.erb views is to give you fine tuned control.
+However, to avoid repeating code, you can call your reins controller from js.erb views if you want. You just need to do this:
 ```
 <%= call_reins_controller %>
 ```
@@ -168,14 +167,15 @@ This will call the matching controller and pass the @reins_params hash if it was
 
 #### Why do my controllers only get called on page:load when using turbolinks? I want page:change!
 
+When using turbolinks, ```page:change``` can mean that we are rendering a page from the turbolinks cache with no server intervention at all. You shoud realize that calling the reins controller from this event will use the last params that were sent by the server, so it's probably not what you want.
+To reiterate, this could mean that if you are going back to a page that was cached by turbolinks, the controller could be called with params from another controller/action, which is probably not what you want.
+
 Just add this to your application.js:
 ```javascript
 $(document).off('page:load').on('page:change', r.call_js_controller);
 ```
 THIS WILL REMOVE any page:load event handlers that you may have attached to $(document), so be warned!
 
-Also of note is that calling the reins controller in this way will use the last params that were sent by the server.
-This means that if you are going back to a page that was cached by turbolinks, the controller could be called with params from another controller/action, which is probably not what you want.
 
 
 

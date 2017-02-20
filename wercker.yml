@@ -1,7 +1,10 @@
-box: wercker/rvm
+box: andrepcg/rails-node-box
 build:
     steps:
         - bundle-install
         - script:
            name: rspec
            code: bundle exec rspec spec
+        - script:
+          name: upload-test-coverage
+          code: bundle exec codeclimate-test-reporter

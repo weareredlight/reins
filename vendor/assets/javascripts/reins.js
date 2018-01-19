@@ -47,4 +47,7 @@ var r = {
  * When page is ready, run javascript controller#action that corresponds to
  * current rails controller#action.
  */
-$(document).on('page:load ready', r.call_js_controller);
+if (Turbolinks !== null && Turbolinks.supported)
+  $(document).on('turbolinks:load', r.call_js_controller);
+else
+  $(document).on('ready', r.call_js_controller);

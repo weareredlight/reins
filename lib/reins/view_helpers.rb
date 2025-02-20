@@ -5,8 +5,10 @@ module Reins
     # reins controller and action to the current rails controller and action name.
     #
     # Returns:: The javascript code that will perform the necessary actions.
-    def reins_script_tag
-      "<script>#{ update_reins_controller }</script>".html_safe
+    def reins_script_tag(**html_attributes)
+      htlm_attributes.map { |k, v| %(#{k}="#{v}") }.join(' ')
+
+      "<script #{html_attributes}>#{ update_reins_controller }</script>".html_safe
     end
 
 

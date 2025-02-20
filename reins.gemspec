@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.name        = 'reins'
   s.version     = Reins::VERSION
   s.authors     = ['Tony Goncalves']
-  s.email       = ['tony@weareredlight.com']
+  s.email       = ['tony@redlight.dev']
   s.homepage    = 'http://github.com/weareredlight/reins'
   s.summary     = 'Reins! Rein in your javascript'
   s.description = 'Reins is a ruby gem that automates the creation of javascript controllers that match the structure of your rails controllers. This includes passing custom data to the JS controllers from the server.'

@@ -6,9 +6,9 @@ module Reins
     #
     # Returns:: The javascript code that will perform the necessary actions.
     def reins_script_tag(**html_attributes)
-      htlm_attributes.map { |k, v| %(#{k}="#{v}") }.join(' ')
+      attrs = html_attributes.map { |k, v| %(#{k}="#{v}") }.join(' ')
 
-      "<script #{html_attributes}>#{ update_reins_controller }</script>".html_safe
+      "<script #{attrs}>#{ update_reins_controller }</script>".html_safe
     end
 
 
